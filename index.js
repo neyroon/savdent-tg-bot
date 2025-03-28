@@ -16,8 +16,8 @@ fastify.post("/callback", async (request, reply) => {
 
     bot.sendMessage(
       process.env.CHAT_ID,
-      `${dentistName && `*Имя стоматолога:* \`${dentistName}\`\n`}${
-        serviceName && `*Название услуги:* \`${serviceName}\`\n`
+      `${dentistName ? `*Имя стоматолога:* \`${dentistName}\`\n` : ""}${
+        serviceName ? `*Название услуги:* \`${serviceName}\`\n` : ""
       }*Имя:* \`${name}\`\n*Телефон:* ${phone}`,
       { parse_mode: "Markdown" }
     );

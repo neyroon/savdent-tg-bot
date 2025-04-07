@@ -30,17 +30,19 @@ fastify.post("/callback", async (request, reply) => {
 
     reply.code(200).send();
 
-    transporter.sendMail({
+    const res = await transporter.sendMail({
       from: "saf.dent@yandex.ru",
       to: "safdent@bk.ru",
       subject: "Hello World!",
       html: `${
-        dentistName ? `<p><b>Имя стоматолога:</b> \`${dentistName}\`</p>` : ""
+        dentistName ? `<p><b>Имя стоматолога:</b> ${dentistName}</p>` : ""
       }${
-        serviceName ? `<p><b>Название услуги:</b> \`${serviceName}\`</p>` : ""
-      }<p><b>Имя:</b> \`${name}\`</p><p><b>Телефон:</b> ${phone}</p>`,
+        serviceName ? `<p><b>Название услуги:</b> ${serviceName}</p>` : ""
+      }<p><b>Имя:</b> ${name}</p><p><b>Телефон:</b> ${phone}</p>`,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 
   reply.code(200).send();
 });

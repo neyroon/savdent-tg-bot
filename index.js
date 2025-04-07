@@ -13,7 +13,7 @@ fastify.register(fastifyCors);
 
 const transporter = nodemailer.createTransport({
   service: "yandex",
-  auth: { user: "saf.dent", pass: "nhedlphjyasvldwj" },
+  auth: { user: process.env.USER_EMAIL, pass: process.env.USER_PASS },
 });
 
 fastify.post("/callback", async (request, reply) => {

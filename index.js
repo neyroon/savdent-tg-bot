@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import fastifyCors from "@fastify/cors";
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -9,6 +10,11 @@ const bot = new TelegramBot(process.env.BOT_API, { polling: true });
 
 const fastify = Fastify();
 fastify.register(fastifyCors);
+
+const transporter = nodemailer.createTransport({
+  service: "yandex",
+  auth: { user: "saf.dent", pass: "nhedlphjyasvldwj" },
+});
 
 fastify.post("/callback", async (request, reply) => {
   try {
@@ -21,7 +27,19 @@ fastify.post("/callback", async (request, reply) => {
       }*Имя:* \`${name}\`\n*Телефон:* ${phone}`,
       { parse_mode: "Markdown" }
     );
+
     reply.code(200).send();
+
+    transporter.sendMail({
+      from: "saf.dent@yandex.ru",
+      to: "safdent@bk.ru",
+      subject: "Hello World!",
+      html: `${
+        dentistName ? `<p><b>Имя стоматолога:</b> \`${dentistName}\`</p>` : ""
+      }${
+        serviceName ? `<p><b>Название услуги:</b> \`${serviceName}\`</p>` : ""
+      }<p><b>Имя:</b> \`${name}\`</p><p><b>Телефон:</b> ${phone}</p>`,
+    });
   } catch (error) {}
 
   reply.code(200).send();
